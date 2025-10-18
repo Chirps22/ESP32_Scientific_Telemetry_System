@@ -4,6 +4,6 @@ This project uses an ESP32 to collect temperature, pressure, humidity, and light
 
 ## Components
 - ESP32 Dev Module
-Soon to be added(currently randomly generating data):
+- Soon to be added(currently randomly generating data):
 - BME280 (Temperature, Humidity, Pressure)
 - BH1750 (Light Level)
