@@ -1,12 +1,16 @@
 #include <WiFi.h>
 #include <WiFiUdp.h>
+#include <Wire.h>
+#include <Adafruit_BME280.h>
+#include <BH1750.h>
 
-const char* wifiSSID = "SSID"; //make sure to remove and put placeholders!!!
-const char* wifiPassword = "Password";   //make sure to remove and put placeholders!!!
-
-const char* destinationIp = "IP";   //make sure to remove and put placeholders!!!
+const char* wifiSSID = "VM1094316"; //make sure to remove and put placeholders!!!
+const char* wifiPassword = "c8bxuz5xghpLvacd";   //make sure to remove and put placeholders!!!
+const char* destinationIp = "192.168.0.23";   //make sure to remove and put placeholders!!!
 const unsigned int destinationPort = 4210;   //make sure to remove and put placeholders!!!???
 
+Adafruit_BME280 bme;
+BH1750 lightMeter;
 WiFiUDP Udp;
 unsigned long lastSend = 0;
 const unsigned long sendIntervalMs = 1000;
@@ -16,6 +20,7 @@ void setup() {
   delay(1000);
   Serial.println("System starting");
 
+  Wire.begin();
   WiFi.begin(wifiSSID, wifiPassword);
   Serial.println("Connecting to WiFi");
   unsigned long start = millis();
@@ -28,17 +33,21 @@ void setup() {
     }
   }
   Serial.println("WiFi connected");
+
+  bme.begin(0x76);
+  lightMeter.begin(BH1750::CONTINUOUS_HIGH_RES_MODE);
+  Serial.println("Sensors initialized");
 }
 
 void loop() {
-  //Simulating data as no real sensors as of yet
   unsigned long now = millis();
-  float temperature = random(200, 350) / 10.0;
-  float pressure = random(9800, 10300) / 10.0;
-  float humidity = random(400, 800) / 10.0;
-  float lightLevel = random(0, 100);
   if (now - lastSend >= sendIntervalMs) {
     lastSend = now;
+    float temperature = bme.readTemperature();
+    float pressure = bme.readPressure() / 100.0F;
+    float humidity = bme.readHumidity();
+    float lightLevel = lightMeter.readLightLevel();
+    
     String json = "{";
     json += "\"Temperature\": " + String(temperature, 2) + ", ";
     json += "\"Pressure\": " + String(pressure, 2) + ", ";

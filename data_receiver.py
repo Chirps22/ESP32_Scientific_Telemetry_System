@@ -9,9 +9,9 @@ sock.bind(("192.168.0.23", 4210))
 timer, temperature, pressure, humidity, lightLevel = [], [], [], [], []
 
 plt.ion()
-fig, ax = plt.subplots(4, 1, figsize=(7, 6))
-plt.pause(0.1)
+fig, ax = plt.subplots(4, 1, figsize=(8, 7))
 start = time.time()
+plt.pause(1)
 
 print(f"Listening for data...")
 
@@ -36,14 +36,11 @@ while True:
         lightLevel.append(graphData.get("Lightlevel", 0))
 
         if len(timer) > 100:
-            timer.pop(0)
-            temperature.pop(0)
-            pressure.pop(0)
-            humidity.pop(0)
-            lightLevel.pop(0)
+            for value in (timer, temperature, pressure, humidity, lightLevel):
+                value.pop(0)
         
         #test received data
-        print(f"t={time.time() - start:.1f}s | Temp={graphData.get("Temperature", 0):.2f}°C | Pres={graphData.get("Pressure", 0):.2f}hPa | Hum={graphData.get("Humidity", 0):.2f}% | Light={graphData.get("Lightlevel", 0):.2f}%")
+        print(f"t={time.time() - start:.1f}s | Temp={graphData.get("Temperature", 0):.2f}°C | Pres={graphData.get("Pressure", 0):.2f}hPa | Hum={graphData.get("Humidity", 0):.2f}% | Light={graphData.get("Lightlevel", 0):.2f}lux")
 
         for a in ax:
             a.clear()
@@ -55,7 +52,7 @@ while True:
         ax[2].plot(timer, humidity, color="green")
         ax[2].set_ylabel("Humidity (%)")
         ax[3].plot(timer, lightLevel, color="yellow")
-        ax[3].set_ylabel("LightLevel (%)")
+        ax[3].set_ylabel("LightLevel (lux)")
         ax[3].set_xlabel("Time (s)")
         plt.pause(0.2)
 
