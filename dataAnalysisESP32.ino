@@ -4,9 +4,9 @@
 #include <Adafruit_BME280.h>
 #include <BH1750.h>
 
-const char* wifiSSID = "VM1094316"; //make sure to remove and put placeholders!!!
-const char* wifiPassword = "c8bxuz5xghpLvacd";   //make sure to remove and put placeholders!!!
-const char* destinationIp = "192.168.0.23";   //make sure to remove and put placeholders!!!
+const char* wifiSSID = ""; //make sure to remove and put placeholders!!!
+const char* wifiPassword = "";   //make sure to remove and put placeholders!!!
+const char* destinationIp = "";   //make sure to remove and put placeholders!!!
 const unsigned int destinationPort = 4210;   //make sure to remove and put placeholders!!!???
 
 Adafruit_BME280 bme;
